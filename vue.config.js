@@ -10,8 +10,8 @@ module.exports = {
         .set('@',resolve('./src'))
         .set('components',resolve('@/components'))
         .set('views',resolve('./src/views'))
-        .set('assets',resolve('./src/assets'))
+        .set('assets',resolve('@/assets'))
         .set('nerwoek',resolve('./src/network'))
-        .set('common',resolve('./src/components/common'))
+        /* .set('common',resolve('./src/components/common')) */
   }
 }

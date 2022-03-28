@@ -1,9 +1,9 @@
 <template>
   <div>
       <swiper>
-      <swiper-item v-for="item in banners" :key="item.title">
+      <swiper-item v-for="item in banners" :key="item.title" >
         <a :href="item.link">
-          <img :src="item.image" :alt="item.title">
+          <img :src="item.image" :alt="item.title" @load="imgLoad">
         </a>
       </swiper-item>
     </swiper>
@@ -25,6 +25,19 @@ export default {
         default(){
             return []
         }
+    }
+  },
+  data() {
+    return {
+      isemit:false
+    }
+  },
+  methods: {
+    imgLoad(){
+      if(!this.isemit){
+        this.$emit('swiperimgLoad');
+        this.isemit = true
+      }
     }
   }
 }

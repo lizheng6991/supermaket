@@ -18,7 +18,7 @@ export default {
   },
   data () {
     return {
-     // isactive:false
+     isactive:false
     };
   },
   computed:{
@@ -30,9 +30,10 @@ export default {
       }
   },
   methods: {
-      itemClick() {
-        this.$router.replace(this.path)
-        
+      itemClick() {      
+        if(!(this.$route.path == this.path)){
+        this.$router.replace(this.path)  
+        }    
       }
   }
 }
