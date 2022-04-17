@@ -39,8 +39,9 @@ export default {
 <style scpoed>
 .navbar{
   position: relative;
-  z-index: 15;
+  z-index: 20;
   background-color: #fff;
+  color: black;
 }
 .detail-nav{
   display: flex;

@@ -4,7 +4,7 @@
     <tab-control ref="tabControl1" 
                   :titles="['流行','新款','精选']" 
                   @tabClick="tabClick" v-show="istabFixed"/> 
-    <scroll class="content" 
+    <scroll class="home-content" 
       ref="scroll" 
       :probe-type="3" 
       @scroll="showScroll"
@@ -161,7 +161,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scpoed>
 #home{
   padding-top: 0px;
   height: 100vh;
@@ -181,9 +181,8 @@ export default {
   left: 0px;
   z-index: 9; */
 }
-.content{
-  height: calc(100vh - 0px);
+.home-content{
+  height: calc(100vh - 44px);
   overflow: hidden;
 }
-@import "~@/assets/css/page.css";
 </style>

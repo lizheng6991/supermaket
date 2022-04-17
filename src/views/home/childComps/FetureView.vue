@@ -17,7 +17,7 @@ export default {
 }
 </script>
 
-<style>
+<style scpoed>
 .feture img{
     width: 100%;
 }

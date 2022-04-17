@@ -1,6 +1,6 @@
 <template>
     <div id="detail">
-        <detail-nav-bar @titleClick="titleClick" ref="navbar"/>
+        <detail-nav-bar @titleClick="titleClick" ref="navbar" class="detail-nav-bar"/>
         <scroll class="centent"
         :probe-type="3"
         :pull-up-load="true"
@@ -13,7 +13,10 @@
          <detail-param-info :paramInfo="paramInfo" class="paraminfo" ref="paraminfo"/>
          <detail-comment-infon :commentInfo="commentInfon" class="comment" ref="comment"/>
          <goods-list :goods="recommendInfo" class="shopinfo" ref="shopinfo"/>
+         
         </scroll>
+        <backtop @click.native="backTop" class="back-top" v-show="isShow"/>
+        <detail-bottom-bar @addCart="addCarts"/>
     </div>
 </template>
 
@@ -22,8 +25,10 @@ import {getDetail,Goods,Shop,GoodsParam,getRecomend} from '@/network/detail';
 
 import Scroll from '@/components/common/scroll/Scroll';
 import GoodsList from '@/components/content/goods/GoodsList';
+import Backtop from '@/components/content/backTop/Backtop.vue';
 
 import {debounce} from '@/components/common/utils/Utils.js';
+import {mapActions} from 'vuex'
 
 import DetailNavBar from './childComeps/DetailNavBar.vue';
 import DetailSwiper from './childComeps/DetailSwiper.vue';
@@ -32,6 +37,7 @@ import DetailShopInfo from './childComeps/DetailShopInfo.vue';
 import DetailGoodsInfo from './childComeps/DetailGoodsInfo.vue';
 import DetailParamInfo from './childComeps/DetailParamInfo.vue';
 import DetailCommentInfon from './childComeps/DetailCommentInfon.vue';
+import DetailBottomBar from './childComeps/DetailBottomBar.vue';
 
 
 
@@ -45,7 +51,9 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfon,
-    GoodsList
+    GoodsList,
+    DetailBottomBar,
+    Backtop
   },
   name: 'Detail',
   data () {
@@ -61,11 +69,20 @@ export default {
       themeTopYs:['.detail-swiper','.paraminfo','.comment','.shopinfo'],
       tabY:[],
       debance:null,
-      currentIndex:0
+      currentIndex:0,
+      isShow:false
 
     };
   },
   methods:{
+    //映射vuex的action里面的方法
+    //方式一
+    ...mapActions(['addCart']),
+    //方式二
+   /*  ...mapActions({
+      add:'addCart'
+    }), */
+
     //监听顶部按钮事件
     titleClick(index){
       console.log(index);
@@ -75,24 +92,25 @@ export default {
     },
     //监听滚动
     tabscroll(opsition){
+      //判断导航按钮的index
       this.tabY.forEach((element,index) => {
         if(this.$refs.navbar.currentIndex !== index ){
           if(-opsition.y < this.tabY[index+1] && -opsition.y >= this.tabY[index] ){
-            this.$refs.navbar.currentIndex = index 
-            console.log(this.$refs.navbar.currentIndex,index); 
+            this.$refs.navbar.currentIndex = index  
           }
           if(-opsition.y >= this.tabY[this.tabY.length - 1]){
                 this.$refs.navbar.currentIndex = this.tabY.length - 1
             }
         }
-        
-        
       });
-     
-  
-     
+      //判断返回按钮的出现
+      this.isShow = opsition.y < -1000 
     },
-    //detailshop 刷新
+    //返回顶部
+    backTop(){
+      this.$refs.scroll.scrollTo(0,0,500)
+    },
+    //detailshop 图片加载刷新
     shopLoad(){
         this.$refs.scroll.refresh()
     },
@@ -101,6 +119,28 @@ export default {
      this.$refs.scroll.refresh()
        
       this.debance()
+    },
+    //添加进购物车
+    addCarts(){
+      //获取购物车商品需要的信息
+      const product ={}
+      product.image = this.topImages[0]
+      product.title = this.goods.title
+      product.desc = this.goods.desc
+      product.price = this.goods.lowPrice
+      product.iid = this.iid 
+
+      //添加到vuex中
+     /*  this.$store.dispatch('addCart',product).then(res => {
+        console.log(res);
+      })
+       */
+      //映射后
+      this.addCart(product).then((res) => {
+        this.$toast.show(res,2000)     
+      },(res) => {
+        this.$toast.show(res,2000)  
+      })
     }
   },
   created() {
@@ -122,6 +162,8 @@ export default {
       //保存评价信息
       if(data.rate.cRate !== 0){
         this.commentInfon = data.rate.list[0]
+      }else{
+        this.commentInfon = {}
       }
       }),
       //请求推荐商品信息
@@ -147,6 +189,24 @@ export default {
   height: 100vh;
 }
 .centent{
-  height: calc(100vh - 44px);
+  height: calc(100vh - 90px);
+  
+}
+.back-top{
+  position: fixed;
+   right: 8px;
+    bottom: 68px;
+}
+.detail-nav-bar{
+  background-color: #fff;
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  z-index: 10;
+
+}
+.detail-swiper{
+  margin-top: 22px;
 }
 </style>

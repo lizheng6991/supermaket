@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div v-if="Object.keys(commentInfo).length !== 0" class="comment-info">
       <div class="info-header">
           <div class="header-title">用户评价</div>
@@ -21,10 +22,14 @@
           </div>
       </div>
   </div>
+  <div v-if="Object.keys(commentInfo).length == 0" class="no-comment-info">
+      <p>暂无用户评价</p>
+  </div>
+  </div>
 </template>
 
 <script>
-import {debounce,formatDate} from '@/components/common/utils/Utils'
+import {formatDate} from '@/components/common/utils/Utils'
 export default {
   name: 'DetailCommentInfon',
   props:{
@@ -59,7 +64,7 @@ export default {
     display: flex;
     justify-content: space-between;
     
-    border-bottom: 2px solid rgb(235, 235, 235);
+    /* border-bottom: 2px solid rgb(235, 235, 235); */
     font-size: 14px;
     font-weight: bold;
 }
@@ -106,8 +111,14 @@ export default {
 .info-img img{
     width: 100px;
     height: 100px;
+    margin-bottom: 10px;
 }
 .info-img{
     margin-top: 10px;
+}
+.no-comment-info{
+    text-align: center;
+    height: 100px;
+    font-size: 50px;
 }
 </style>

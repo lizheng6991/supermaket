@@ -6,7 +6,7 @@ export function getHomeMultidata() {
         url:'/home/multidata'
     })            
 }
-//获取分页数据
+//获取主页数据
 export function getHomeGoods(type,page) {
     return request({
         url:'/home/data',
